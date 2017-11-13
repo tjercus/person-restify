@@ -1,18 +1,21 @@
+
+// es6 imports don't work in node.js yet!
+// import restify from "restify";
+
 const restify = require("restify");
 const corsMiddleware = require('restify-cors-middleware');
-// import restify from "restify";
-// import {getPersons, findPersonByName} from "./personService";
 
-const getPersons = require("./personService").getPersons;
-const findPersonByName = require("./personService").findPersonByName;
+const makePersonService = require("./personService");
+
+const personService = makePersonService();
 
 const respondToGetPerson = (req, res, next) => {
-  res.send(findPersonByName(req.params.name));
+  res.send(personService.findPersonByName(req.params.name));
   next();
 };
 
 const respondToGetPersons = (req, res, next) => {
-  res.send(getPersons());
+  res.send(personService.getPersons());
   next();
 };
 
@@ -24,8 +27,8 @@ const cors = corsMiddleware({
   exposeHeaders: ['API-Token-Expiry']
 });
 
-server.pre(cors.preflight)
-server.use(cors.actual)
+server.pre(cors.preflight);
+server.use(cors.actual);
 
 server.get("/persons/", respondToGetPersons);
 server.get("/persons/:name", respondToGetPerson);

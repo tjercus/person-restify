@@ -13,7 +13,9 @@ class App extends Component {
   }
 
   componentDidMount = () => {
-    fetchPersons().then(persons => this.setState({persons: persons}));
+    setTimeout(() => {
+      fetchPersons().then(persons => this.setState({persons: persons}));
+    }, 2000);
   };
 
   render() {
